@@ -1,15 +1,14 @@
 # RSA Encryption Algorithm Explained 
 
 
-The Set Of Integers Modulo P
+### The Set Of Integers Modulo P
 The set:
-
 ℤp={0,1,2,...,p−1}
 Is called the set of integers modulo p (or mod p for short). It is a set that contains Integers from 0 up until p−1.
 
 Example: ℤ10={0,1,2,3,4,5,6,7,8,9}
 
-Integer Remainder After Dividing
+### Integer Remainder After Dividing
 When we first learned about numbers at school, we had no notion of real numbers, only integers. Therefore we were told that 5 divided by 2 was equal to 2 remainder 1, and not 212. It turns out that this type of math is vital to RSA, and is one of the reasons that secures RSA. A formal way of stating a remainder after dividing by another number is an equivalence relationship:
 
 ∀x,y,z,k∈ℤ,x≡ymodz⟺x=k⋅z+y
@@ -34,21 +33,21 @@ The above just says that an inverse only exists if the greatest common divisor i
 
 Example: Lets work in the set ℤ9, then 4∈ℤ9 and gcd(4,9)=1. Therefore 4 has a multiplicative inverse (written 4−1) in mod 9, which is 7. And indeed, 4⋅7=28=1mod9. But not all numbers have inverses. For instance, 3∈ℤ9 but 3−1 does not exist! This is because gcd(3,9)=3≠1.
 
-Prime Numbers
+### Prime Numbers
 Prime numbers are very important to the RSA algorithm. A prime is a number that can only be divided without a remainder by itself and 1. For example, 5 is a prime number (any other number besides 1 and 5 will result in a remainder after division) while 10 is not a prime.
 
 This has an important implication: For any prime number p, every number from 1 up to p−1 has a gcd of 1 with p, and therefore has a multiplicative inverse in modulo p.
 
-Euler's Totient
+### Euler's Totient
 Euler's Totient is the number of elements that have a multiplicative inverse in a set of modulo integers. The totient is denoted using the Greek symbol phi ϕ. From 4 above, we can see that the totient is just the count of the number of elements that have their gcd with the modulus equal to 1. This brings us to an important equation regarding the totient and prime numbers:
 
 p∈ℙ,ϕ(p)=p−1
 Example: ϕ(7)=|{1,2,3,4,5,6}|=6.
 
-RSA
+## RSA
 With the above background, we have enough tools to describe RSA and show how it works. RSA is actually a set of two algorithms:
 
-Key Generation: A key generation algorithm.
+### Key Generation: A key generation algorithm.
 RSA Function Evaluation: A function F, that takes as input a point x and a key k and produces either an encrypted result or plaintext, depending on the input and the key.
 Key Generation
 The key generation algorithm is the most complex part of RSA. The aim of the key generation algorithm is to generate both the public and the private RSA keys. Sounds simple enough! Unfortunately, weak key generation makes RSA very vulnerable to attack. So it has to be done correctly. Here is what has to happen in order to generate secure RSA keys:
@@ -59,7 +58,7 @@ Totient: The totient of n,ϕ(n) is calculated.
 Public Key: A prime number is calculated from the range [3,ϕ(n)) that has a greatest common divisor of 1 with ϕ(n).
 Private Key: Multiplicative Inverse of the prime has a gcd of 1 with ϕ(n), we are able to determine it's inverse with respect to modϕ(n).
 
-Large Prime Number Generation
+### Large Prime Number Generation
 It is vital for RSA security that two very large prime numbers be generated that are quite far apart. Generating composite numbers, or even prime numbers that are close together makes RSA totally insecure.
 
 How does one generate large prime numbers? The answer is to pick a large random number (a very large random number) and test for primeness. If that number fails the prime test, then add 1 and start over again until we have a number that passes a prime test. The problem is now: How do we test a number in order to determine if it is prime?
@@ -68,13 +67,13 @@ The answer: An incredibly fast prime number tester called the Rabin-Miller prima
 
 So with Rabin-Miller, we generate two large prime numbers: p and q.
 
-Modulus
+### Modulus
 Once we have our two prime numbers, we can generate a modulus very easily:
 
 n=p*q
 RSA's main security foundation relies upon the fact that given two large prime numbers, a composite number (in this case n) can very easily be deduced by multiplying the two primes together. But, given just n, there is no known algorithm to efficiently determining n's prime factors. In fact, it is considered a hard problem. The foundation of RSA's security relies upon the fact that given a composite number, it is considered a hard problem to determine it's prime factors.
 
-Totient
+### Totient
 With the prime factors of n, the totient can be very quickly calculated:
 
 ϕ(n)=(p−1)*(q−1)
@@ -83,23 +82,24 @@ It is derived like so:
 
 The reason why the RSA becomes vulnerable if one can determine the prime factors of the modulus is because then one can easily determine the totient.
 
-Public Key
+### Public Key
 Next, the public key is determined. Normally expressed as e, it is a prime number chosen in the range [3,ϕ(n)).If 3 is chosen, it could lead to security flaws. So in practice, the public key is normally set at 65537. Note that because the public key is prime, it has a high chance of a gcd equal to 1 with ϕ(n). If this is not the case, then we must use another prime number that is not 65537, but this will only occur if 65537 is a factor of ϕ(n), something that is quite unlikely, but must still be checked for.
 
 An interesting observation: If in practice, the number above is set at 65537, then it is not picked at random; surely this is a problem? Actually, no, it isn't. As the name implies, this key is public, and therefore is shared with everyone. As long as the private key cannot be deduced from the public key, we are happy. The reason why the public key is not randomly chosen in practice is because it is desirable not to have a large number. This is because it is more efficient to encrypt with smaller numbers than larger numbers.
 
 The public key is actually a key pair of the exponent e and the modulus n and is present as follows
 (e,n)
-Private Key
+
+### Private Key
 Because the public key has a gcd of 1 with ϕ(n), the multiplicative inverse of the public key with respect to ϕ(n) can be efficiently and quickly determined using the Extended Euclidean Algorithm. This multiplicative inverse is the private key. The common notation for expressing the private key is d. So in effect, we have the following equation (one of the most important equations in RSA):
 
-e*d = 1modϕ(n)
+e*d = 1 mod ϕ(n)
 Just like the public key, the private key is also a key pair of the exponent d and modulus n:
 (d,n)
 
 One of the absolute fundamental security assumptions behind RSA is that given a public key, one cannot efficiently determine the private key.
 
-RSA Function Evaluation
+### RSA Function Evaluation
 This is the process of transforming a plaintext message into ciphertext, or vice-versa. The RSA function, for message m and key k is evaluated as follows:
 
 F(m,k)=(m*k) mod n
