@@ -110,4 +110,6 @@ Encrypting with the private key, and then decrypting with the public key.
 The two cases above are mirrors. I will explain the first case, the second follows from the first
 
 Encryption: F(m,e)=(m*e) mod n = c, where m is the message, e is the public key and c is the cipher.
+
+
 Decryption: F(c,d)=(c*d) mod n=m.
