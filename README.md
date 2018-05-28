@@ -1,4 +1,4 @@
-# RSA Encryption Algorithm Explained 
+# RSA Algorithm Explained 
 
 
 ### The Set Of Integers Modulo P
